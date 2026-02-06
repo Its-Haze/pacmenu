@@ -37,6 +37,7 @@ HEADER="╭───────────────────────
 │  Alt-I: package info                         │
 ╰──────────────────────────────────────────────╯"
 
+# shellcheck disable=SC2016
 selected=$($PM -Qqe 2>/dev/null | sort | fzf \
     --prompt '  Search > ' \
     --header "$HEADER" \
@@ -48,7 +49,6 @@ selected=$($PM -Qqe 2>/dev/null | sort | fzf \
     --bind 'alt-j:preview-down' \
     --bind 'alt-k:preview-up' \
     --bind "$deptree_bind" \
-    # shellcheck disable=SC2016
     --bind 'alt-f:change-preview(pacman -Ql {1} 2>/dev/null | awk "{print \$2}" || echo "No file list for {1}")+change-preview-label( Installed Files )' \
     --bind "alt-i:change-preview($PM -Qi {1} 2>/dev/null || echo 'No info available for {1}')+change-preview-label( Package Info )" \
     --color 'pointer:cyan,marker:cyan,prompt:cyan,info:cyan,spinner:cyan,header:cyan' \
