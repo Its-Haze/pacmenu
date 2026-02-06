@@ -10,6 +10,7 @@ for _lib in \
     "$SCRIPT_DIR/../lib/archer-core.sh" \
     "$HOME/.local/lib/archer/archer-core.sh" \
     "/usr/lib/archer/archer-core.sh"; do
+    # shellcheck source=../lib/archer-core.sh
     [[ -f "$_lib" ]] && { source "$_lib"; break; }
 done
 [[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
@@ -47,7 +48,7 @@ selected=$($PM -Qqe 2>/dev/null | sort | fzf \
     --bind 'alt-j:preview-down' \
     --bind 'alt-k:preview-up' \
     --bind "$deptree_bind" \
-    --bind 'alt-f:change-preview(pacman -Ql {1} 2>/dev/null | awk "{print \$2}" || echo "No file list for {1}")+change-preview-label( Installed Files )' \
+    --bind 'alt-f:change-preview(pacman -Ql {1} 2>/dev/null | awk '"'"'{print $2}'"'"' || echo "No file list for {1}")+change-preview-label( Installed Files )' \
     --bind "alt-i:change-preview($PM -Qi {1} 2>/dev/null || echo 'No info available for {1}')+change-preview-label( Package Info )" \
     --color 'pointer:cyan,marker:cyan,prompt:cyan,info:cyan,spinner:cyan,header:cyan' \
     --marker '● ' \

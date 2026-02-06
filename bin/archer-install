@@ -10,6 +10,7 @@ for _lib in \
     "$SCRIPT_DIR/../lib/archer-core.sh" \
     "$HOME/.local/lib/archer/archer-core.sh" \
     "/usr/lib/archer/archer-core.sh"; do
+    # shellcheck source=../lib/archer-core.sh
     [[ -f "$_lib" ]] && { source "$_lib"; break; }
 done
 [[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
@@ -48,7 +49,7 @@ HEADER="╭───────────────────────
 │  Alt-B: view PKGBUILD    Alt-I: package info  │
 ╰──────────────────────────────────────────────╯"
 
-selected=$(cat "$packages" | fzf \
+selected=$(fzf < "$packages" \
     --multi \
     --prompt '  Install > ' \
     --header "$HEADER" \
@@ -81,18 +82,18 @@ if [[ -z "$selected" ]]; then
     exit 0
 fi
 
-# Convert newlines to space-separated list
-pkg_list=$(echo "$selected" | tr '\n' ' ')
-pkg_count=$(echo "$selected" | wc -l)
+# Convert selection to array
+mapfile -t pkg_array <<< "$selected"
+pkg_count=${#pkg_array[@]}
 
 echo ""
 echo -e "${GREEN}${BOLD}Installing $pkg_count package(s):${RESET}"
-echo -e "${GREEN}  $pkg_list${RESET}"
+echo -e "${GREEN}  ${pkg_array[*]}${RESET}"
 echo ""
 
 # Install (no --noconfirm, user reviews)
 if [[ "$PM" == "pacman" ]]; then
-    sudo pacman -S --needed $pkg_list
+    sudo pacman -S --needed "${pkg_array[@]}"
 else
-    $PM -S --needed $pkg_list
+    $PM -S --needed "${pkg_array[@]}"
 fi

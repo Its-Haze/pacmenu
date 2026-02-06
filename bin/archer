@@ -10,6 +10,7 @@ for _lib in \
     "$SCRIPT_DIR/../lib/archer-core.sh" \
     "$HOME/.local/lib/archer/archer-core.sh" \
     "/usr/lib/archer/archer-core.sh"; do
+    # shellcheck source=../lib/archer-core.sh
     [[ -f "$_lib" ]] && { source "$_lib"; break; }
 done
 [[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
