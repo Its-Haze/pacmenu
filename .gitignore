@@ -1,0 +1,18 @@
+# Package build artifacts
+*.pkg.tar.*
+pkg/
+src/
+
+# Cache
+.cache/
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

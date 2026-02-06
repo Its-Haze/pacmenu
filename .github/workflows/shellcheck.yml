@@ -1,0 +1,27 @@
+name: ShellCheck
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck bin/archer bin/archer-install bin/archer-remove bin/archer-search lib/archer-core.sh install.sh
+
+      - name: Syntax check (bash -n)
+        run: |
+          for f in bin/archer bin/archer-install bin/archer-remove bin/archer-search lib/archer-core.sh install.sh; do
+            echo "Checking $f..."
+            bash -n "$f"
+          done

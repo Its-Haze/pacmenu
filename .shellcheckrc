@@ -1,0 +1,5 @@
+# Follow source files
+external-sources=true
+
+# Allow shellcheck to find sourced files
+source-path=lib

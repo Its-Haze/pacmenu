@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# archer-search - Browse installed packages (read-only)
+# Uses fzf for interactive package browsing with info preview
+
+set -euo pipefail
+
+# ── Resolve shared library ───────────────────────────────────────────
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+for _lib in \
+    "$SCRIPT_DIR/../lib/archer-core.sh" \
+    "$HOME/.local/lib/archer/archer-core.sh" \
+    "/usr/lib/archer/archer-core.sh"; do
+    [[ -f "$_lib" ]] && { source "$_lib"; break; }
+done
+[[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
+
+check_deps
+detect_pm
+
+# ── Conditional bindings ─────────────────────────────────────────────
+if has_pactree; then
+    deptree_bind="alt-d:change-preview(pactree {1} 2>/dev/null || echo 'No dependency tree for {1}')+change-preview-label( Dependency Tree )"
+else
+    deptree_bind="alt-d:change-preview(echo 'pactree not found. Install pacman-contrib for dependency tree viewing:
+  sudo pacman -S pacman-contrib')+change-preview-label( Dependency Tree )"
+fi
+
+# ── fzf selection ────────────────────────────────────────────────────
+
+HEADER="╭──────────────────────────────────────────────╮
+│  Package Browser (installed)                 │
+├──────────────────────────────────────────────┤
+│  Enter: view details   Esc: exit             │
+│  Alt-P: toggle preview   Alt-J/K: scroll     │
+│  Alt-D: dependency tree  Alt-F: files list   │
+│  Alt-I: package info                         │
+╰──────────────────────────────────────────────╯"
+
+selected=$($PM -Qqe 2>/dev/null | sort | fzf \
+    --prompt '  Search > ' \
+    --header "$HEADER" \
+    --header-first \
+    --preview "$PM -Qi {1} 2>/dev/null || echo 'No info available for {1}'" \
+    --preview-window 'bottom,65%,wrap,border-top' \
+    --preview-label ' Package Info ' \
+    --bind 'alt-p:toggle-preview' \
+    --bind 'alt-j:preview-down' \
+    --bind 'alt-k:preview-up' \
+    --bind "$deptree_bind" \
+    --bind 'alt-f:change-preview(pacman -Ql {1} 2>/dev/null | awk "{print \$2}" || echo "No file list for {1}")+change-preview-label( Installed Files )' \
+    --bind "alt-i:change-preview($PM -Qi {1} 2>/dev/null || echo 'No info available for {1}')+change-preview-label( Package Info )" \
+    --color 'pointer:cyan,marker:cyan,prompt:cyan,info:cyan,spinner:cyan,header:cyan' \
+    --marker '● ' \
+    --pointer '▶' \
+    --border rounded \
+    --border-label ' archer-search ' \
+    --border-label-pos 3 \
+    --scrollbar '▐' \
+    --no-scrollbar \
+    --height '100%' \
+    --reverse \
+    --info inline-right \
+    --margin 0 \
+    --padding 1 \
+) || exit 0
+
+# Show full info on Enter
+if [[ -n "$selected" ]]; then
+    echo ""
+    $PM -Qi "$selected"
+fi

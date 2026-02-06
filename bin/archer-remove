@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# archer-remove - Remove installed packages
+# Uses fzf for interactive package selection with multi-select
+
+set -euo pipefail
+
+# ── Resolve shared library ───────────────────────────────────────────
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+for _lib in \
+    "$SCRIPT_DIR/../lib/archer-core.sh" \
+    "$HOME/.local/lib/archer/archer-core.sh" \
+    "/usr/lib/archer/archer-core.sh"; do
+    [[ -f "$_lib" ]] && { source "$_lib"; break; }
+done
+[[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
+
+check_deps
+detect_pm
+
+# ── Reverse dependency binding ───────────────────────────────────────
+if has_pactree; then
+    revdep_bind="alt-d:change-preview(pactree -r {1} 2>/dev/null || echo 'No dependency info for {1}')+change-preview-label( Required By )"
+else
+    revdep_bind="alt-d:change-preview(echo 'pactree not found. Install pacman-contrib for dependency tree viewing:
+  sudo pacman -S pacman-contrib')+change-preview-label( Required By )"
+fi
+
+# ── fzf selection ────────────────────────────────────────────────────
+
+HEADER="╭──────────────────────────────────────────────╮
+│  Package Remover (uninstall)                 │
+├──────────────────────────────────────────────┤
+│  Tab: select  Enter: remove  Esc: cancel     │
+│  Alt-P: toggle preview   Alt-J/K: scroll     │
+│  Alt-D: view dependencies  Alt-I: pkg info   │
+╰──────────────────────────────────────────────╯"
+
+selected=$($PM -Qqe 2>/dev/null | sort | fzf \
+    --multi \
+    --prompt '  Remove > ' \
+    --header "$HEADER" \
+    --header-first \
+    --preview "$PM -Qi {1} 2>/dev/null || echo 'No info available for {1}'" \
+    --preview-window 'bottom,65%,wrap,border-top' \
+    --preview-label ' Package Info ' \
+    --bind 'alt-p:toggle-preview' \
+    --bind 'alt-j:preview-down' \
+    --bind 'alt-k:preview-up' \
+    --bind "$revdep_bind" \
+    --bind "alt-i:change-preview($PM -Qi {1} 2>/dev/null || echo 'No info available for {1}')+change-preview-label( Package Info )" \
+    --color 'pointer:red,marker:red,prompt:red,info:red,spinner:red,header:red' \
+    --marker '✗ ' \
+    --pointer '▶' \
+    --border rounded \
+    --border-label ' archer-remove ' \
+    --border-label-pos 3 \
+    --scrollbar '▐' \
+    --no-scrollbar \
+    --height '100%' \
+    --reverse \
+    --info inline-right \
+    --margin 0 \
+    --padding 1 \
+) || exit 0
+
+if [[ -z "$selected" ]]; then
+    echo "No packages selected."
+    exit 0
+fi
+
+# Convert newlines to space-separated list
+pkg_list=$(echo "$selected" | tr '\n' ' ')
+pkg_count=$(echo "$selected" | wc -l)
+
+echo ""
+echo -e "${RED}${BOLD}Removing $pkg_count package(s):${RESET}"
+echo -e "${RED}  $pkg_list${RESET}"
+echo ""
+echo -e "${RED}${BOLD}This will remove the packages and their unneeded dependencies.${RESET}"
+echo ""
+
+# Always use pacman directly for removal (safest, no AUR helper needed)
+sudo pacman -Rns $pkg_list

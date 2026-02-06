@@ -1,0 +1,29 @@
+#compdef archer
+
+# Zsh completion for archer
+
+_archer() {
+    local -a commands
+    commands=(
+        'install:Install packages (official repos + AUR)'
+        'remove:Remove installed packages'
+        'search:Browse installed packages'
+        'help:Show help information'
+        'version:Show version'
+    )
+
+    _arguments -s \
+        '1:command:->cmd' \
+        '--help[Show help]' \
+        '-h[Show help]' \
+        '--version[Show version]' \
+        '-v[Show version]'
+
+    case "$state" in
+        cmd)
+            _describe 'command' commands
+            ;;
+    esac
+}
+
+_archer "$@"

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Archer
+GenericName=Package Manager
+Comment=Interactive TUI for Arch Linux package management
+Exec=archer
+Icon=system-software-install
+Terminal=true
+Categories=System;PackageManager;
+Keywords=package;install;remove;aur;pacman;fzf;
