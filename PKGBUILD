@@ -1,10 +1,10 @@
 # Maintainer: haze
-pkgname=archer
+pkgname=pacmenu
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="Interactive fzf-based TUI for Arch Linux package management"
 arch=('any')
-url="https://github.com/Its-Haze/archer"
+url="https://github.com/Its-Haze/pacmenu"
 license=('MIT')
 depends=('bash' 'fzf' 'pacman')
 optdepends=(

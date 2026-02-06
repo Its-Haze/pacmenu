@@ -1,4 +1,4 @@
-# Archer
+# pacmenu
 
 Interactive fzf-based TUI for Arch Linux package management. Install, remove, and browse packages with fuzzy search, multi-select, and live previews.
 
@@ -39,14 +39,14 @@ Interactive fzf-based TUI for Arch Linux package management. Install, remove, an
 ### Quick Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/Its-Haze/archer/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Its-Haze/pacmenu/main/install.sh | bash
 ```
 
 ### Manual Install
 
 ```bash
-git clone https://github.com/Its-Haze/archer.git
-cd archer
+git clone https://github.com/Its-Haze/pacmenu.git
+cd pacmenu
 make install
 ```
 
@@ -59,7 +59,7 @@ sudo make PREFIX=/usr install
 ### AUR
 
 ```bash
-yay -S archer
+yay -S pacmenu
 ```
 
 ### Uninstall
@@ -73,15 +73,15 @@ sudo make PREFIX=/usr uninstall
 ## Usage
 
 ```bash
-archer              # Interactive menu
-archer install      # Install packages
-archer remove       # Remove packages
-archer search       # Browse installed packages
-archer --help       # Show help
-archer --version    # Show version
+pacmenu              # Interactive menu
+pacmenu install      # Install packages
+pacmenu remove       # Remove packages
+pacmenu search       # Browse installed packages
+pacmenu --help       # Show help
+pacmenu --version    # Show version
 ```
 
-Short aliases: `archer i`, `archer r`, `archer s`
+Short aliases: `pacmenu i`, `pacmenu r`, `pacmenu s`
 
 ## Dependencies
 
@@ -101,8 +101,8 @@ Short aliases: `archer i`, `archer r`, `archer s`
 ## Development
 
 ```bash
-git clone https://github.com/Its-Haze/archer.git
-cd archer
+git clone https://github.com/Its-Haze/pacmenu.git
+cd pacmenu
 make dev       # Symlink scripts for live development
 make check     # Run shellcheck + syntax validation
 make clean     # Clear package cache

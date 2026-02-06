@@ -17,11 +17,11 @@ jobs:
 
       - name: Run ShellCheck
         run: |
-          shellcheck bin/archer bin/archer-install bin/archer-remove bin/archer-search lib/archer-core.sh install.sh
+          shellcheck bin/pacmenu bin/pacmenu-install bin/pacmenu-remove bin/pacmenu-search lib/pacmenu-core.sh install.sh
 
       - name: Syntax check (bash -n)
         run: |
-          for f in bin/archer bin/archer-install bin/archer-remove bin/archer-search lib/archer-core.sh install.sh; do
+          for f in bin/pacmenu bin/pacmenu-install bin/pacmenu-remove bin/pacmenu-search lib/pacmenu-core.sh install.sh; do
             echo "Checking $f..."
             bash -n "$f"
           done

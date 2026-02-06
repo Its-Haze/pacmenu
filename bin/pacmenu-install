@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# archer-install - Install packages (official repos + AUR)
+# pacmenu-install - Install packages (official repos + AUR)
 # Uses fzf for interactive package selection with multi-select
 
 set -euo pipefail
@@ -7,13 +7,13 @@ set -euo pipefail
 # ── Resolve shared library ───────────────────────────────────────────
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 for _lib in \
-    "$SCRIPT_DIR/../lib/archer-core.sh" \
-    "$HOME/.local/lib/archer/archer-core.sh" \
-    "/usr/lib/archer/archer-core.sh"; do
-    # shellcheck source=../lib/archer-core.sh
+    "$SCRIPT_DIR/../lib/pacmenu-core.sh" \
+    "$HOME/.local/lib/pacmenu/pacmenu-core.sh" \
+    "/usr/lib/pacmenu/pacmenu-core.sh"; do
+    # shellcheck source=../lib/pacmenu-core.sh
     [[ -f "$_lib" ]] && { source "$_lib"; break; }
 done
-[[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
+[[ -z "${PACMENU_VERSION:-}" ]] && { echo "Error: pacmenu-core.sh not found" >&2; exit 1; }
 
 check_deps
 detect_pm
@@ -66,7 +66,7 @@ selected=$(fzf < "$packages" \
     --marker '✓ ' \
     --pointer '▶' \
     --border rounded \
-    --border-label ' archer-install ' \
+    --border-label ' pacmenu-install ' \
     --border-label-pos 3 \
     --scrollbar '▐' \
     --no-scrollbar \

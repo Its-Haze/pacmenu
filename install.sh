@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# archer installer - curl one-liner:
-#   curl -sSL https://raw.githubusercontent.com/OWNER/archer/main/install.sh | bash
+# pacmenu installer - curl one-liner:
+#   curl -sSL https://raw.githubusercontent.com/Its-Haze/pacmenu/main/install.sh | bash
 #
-# Installs archer to ~/.local/bin and ~/.local/lib/archer
+# Installs pacmenu to ~/.local/bin and ~/.local/lib/pacmenu
 
 set -euo pipefail
 
-REPO_URL="https://raw.githubusercontent.com/Its-Haze/archer/main"
+REPO_URL="https://raw.githubusercontent.com/Its-Haze/pacmenu/main"
 PREFIX="${HOME}/.local"
 BINDIR="${PREFIX}/bin"
-LIBDIR="${PREFIX}/lib/archer"
+LIBDIR="${PREFIX}/lib/pacmenu"
 COMPDIR_BASH="${PREFIX}/share/bash-completion/completions"
 COMPDIR_ZSH="${PREFIX}/share/zsh/site-functions"
 COMPDIR_FISH="${PREFIX}/share/fish/vendor_completions.d"
@@ -26,40 +26,40 @@ die() {
 }
 
 # Check required dependencies
-command -v pacman &>/dev/null || die "pacman not found. Archer requires Arch Linux."
+command -v pacman &>/dev/null || die "pacman not found. pacmenu requires Arch Linux."
 command -v fzf &>/dev/null || die "fzf not found. Install it first: sudo pacman -S fzf"
 command -v curl &>/dev/null || die "curl not found. Install it first: sudo pacman -S curl"
 
-echo -e "${GREEN}${BOLD}Installing archer...${RESET}"
+echo -e "${GREEN}${BOLD}Installing pacmenu...${RESET}"
 
 # Create directories
 mkdir -p "$BINDIR" "$LIBDIR" "$COMPDIR_BASH" "$COMPDIR_ZSH" "$COMPDIR_FISH" "$DESKTOPDIR"
 
 # Download scripts
-for script in archer archer-install archer-remove archer-search; do
+for script in pacmenu pacmenu-install pacmenu-remove pacmenu-search; do
     curl -sSL "$REPO_URL/bin/$script" -o "$BINDIR/$script"
     chmod 755 "$BINDIR/$script"
 done
 
 # Download library
-curl -sSL "$REPO_URL/lib/archer-core.sh" -o "$LIBDIR/archer-core.sh"
-chmod 644 "$LIBDIR/archer-core.sh"
+curl -sSL "$REPO_URL/lib/pacmenu-core.sh" -o "$LIBDIR/pacmenu-core.sh"
+chmod 644 "$LIBDIR/pacmenu-core.sh"
 
 # Download completions
-curl -sSL "$REPO_URL/completions/archer.bash" -o "$COMPDIR_BASH/archer"
-curl -sSL "$REPO_URL/completions/_archer" -o "$COMPDIR_ZSH/_archer"
-curl -sSL "$REPO_URL/completions/archer.fish" -o "$COMPDIR_FISH/archer.fish"
+curl -sSL "$REPO_URL/completions/pacmenu.bash" -o "$COMPDIR_BASH/pacmenu"
+curl -sSL "$REPO_URL/completions/_pacmenu" -o "$COMPDIR_ZSH/_pacmenu"
+curl -sSL "$REPO_URL/completions/pacmenu.fish" -o "$COMPDIR_FISH/pacmenu.fish"
 
 # Download desktop entry
-curl -sSL "$REPO_URL/desktop/archer.desktop" -o "$DESKTOPDIR/archer.desktop"
+curl -sSL "$REPO_URL/desktop/pacmenu.desktop" -o "$DESKTOPDIR/pacmenu.desktop"
 
 echo ""
-echo -e "${GREEN}${BOLD}archer installed successfully!${RESET}"
+echo -e "${GREEN}${BOLD}pacmenu installed successfully!${RESET}"
 echo ""
-echo "  Usage: archer              (interactive menu)"
-echo "         archer install      (install packages)"
-echo "         archer remove       (remove packages)"
-echo "         archer search       (browse packages)"
+echo "  Usage: pacmenu              (interactive menu)"
+echo "         pacmenu install      (install packages)"
+echo "         pacmenu remove       (remove packages)"
+echo "         pacmenu search       (browse packages)"
 echo ""
 
 # Check PATH

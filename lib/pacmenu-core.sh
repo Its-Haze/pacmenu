@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# archer-core.sh - Shared library for archer package management TUI
-# Sourced by all archer scripts. Do not execute directly.
+# pacmenu-core.sh - Shared library for pacmenu package management TUI
+# Sourced by all pacmenu scripts. Do not execute directly.
 
 # shellcheck disable=SC2034  # Variables used by sourcing scripts
 
-ARCHER_VERSION="1.0.0"
+PACMENU_VERSION="1.0.0"
 
 # ── Colors ───────────────────────────────────────────────────────────
 GREEN='\033[0;32m'
@@ -52,7 +52,7 @@ check_deps() {
     local missing=()
 
     if ! command -v pacman &>/dev/null; then
-        die "pacman not found. Archer requires Arch Linux (or an Arch-based distro)."
+        die "pacman not found. pacmenu requires Arch Linux (or an Arch-based distro)."
     fi
 
     if ! command -v fzf &>/dev/null; then
@@ -78,7 +78,7 @@ has_pactree() {
 # ── Cache ────────────────────────────────────────────────────────────
 
 get_cache_dir() {
-    local dir="${XDG_CACHE_HOME:-$HOME/.cache}/archer"
+    local dir="${XDG_CACHE_HOME:-$HOME/.cache}/pacmenu"
     mkdir -p "$dir"
     echo "$dir"
 }
@@ -88,9 +88,9 @@ get_cache_dir() {
 #
 #   SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 #   for _lib in \
-#       "$SCRIPT_DIR/../lib/archer-core.sh" \
-#       "$HOME/.local/lib/archer/archer-core.sh" \
-#       "/usr/lib/archer/archer-core.sh"; do
+#       "$SCRIPT_DIR/../lib/pacmenu-core.sh" \
+#       "$HOME/.local/lib/pacmenu/pacmenu-core.sh" \
+#       "/usr/lib/pacmenu/pacmenu-core.sh"; do
 #       [[ -f "$_lib" ]] && { source "$_lib"; break; }
 #   done
-#   [[ -z "${ARCHER_VERSION:-}" ]] && { echo "Error: archer-core.sh not found" >&2; exit 1; }
+#   [[ -z "${PACMENU_VERSION:-}" ]] && { echo "Error: pacmenu-core.sh not found" >&2; exit 1; }

@@ -1,8 +1,8 @@
-#compdef archer
+#compdef pacmenu
 
-# Zsh completion for archer
+# Zsh completion for pacmenu
 
-_archer() {
+_pacmenu() {
     local -a commands
     commands=(
         'install:Install packages (official repos + AUR)'
@@ -26,4 +26,4 @@ _archer() {
     esac
 }
 
-_archer "$@"
+_pacmenu "$@"

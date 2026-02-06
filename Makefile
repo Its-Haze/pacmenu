@@ -1,15 +1,15 @@
 PREFIX    ?= $(HOME)/.local
 DESTDIR   ?=
 BINDIR     = $(DESTDIR)$(PREFIX)/bin
-LIBDIR     = $(DESTDIR)$(PREFIX)/lib/archer
+LIBDIR     = $(DESTDIR)$(PREFIX)/lib/pacmenu
 SHAREDIR   = $(DESTDIR)$(PREFIX)/share
 BASHCOMPDIR = $(SHAREDIR)/bash-completion/completions
 ZSHCOMPDIR  = $(SHAREDIR)/zsh/site-functions
 FISHCOMPDIR = $(SHAREDIR)/fish/vendor_completions.d
 DESKTOPDIR  = $(SHAREDIR)/applications
-LICENSEDIR  = $(SHAREDIR)/licenses/archer
+LICENSEDIR  = $(SHAREDIR)/licenses/pacmenu
 
-SCRIPTS = bin/archer bin/archer-install bin/archer-remove bin/archer-search
+SCRIPTS = bin/pacmenu bin/pacmenu-install bin/pacmenu-remove bin/pacmenu-search
 
 .PHONY: install uninstall check dev clean help
 
@@ -17,40 +17,40 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-install: ## Install archer to PREFIX (default: ~/.local)
-	install -Dm755 bin/archer         "$(BINDIR)/archer"
-	install -Dm755 bin/archer-install "$(BINDIR)/archer-install"
-	install -Dm755 bin/archer-remove  "$(BINDIR)/archer-remove"
-	install -Dm755 bin/archer-search  "$(BINDIR)/archer-search"
-	install -Dm644 lib/archer-core.sh "$(LIBDIR)/archer-core.sh"
-	install -Dm644 completions/archer.bash "$(BASHCOMPDIR)/archer"
-	install -Dm644 completions/_archer     "$(ZSHCOMPDIR)/_archer"
-	install -Dm644 completions/archer.fish "$(FISHCOMPDIR)/archer.fish"
-	install -Dm644 desktop/archer.desktop  "$(DESKTOPDIR)/archer.desktop"
-	install -Dm644 LICENSE                 "$(LICENSEDIR)/LICENSE"
+install: ## Install pacmenu to PREFIX (default: ~/.local)
+	install -Dm755 bin/pacmenu         "$(BINDIR)/pacmenu"
+	install -Dm755 bin/pacmenu-install "$(BINDIR)/pacmenu-install"
+	install -Dm755 bin/pacmenu-remove  "$(BINDIR)/pacmenu-remove"
+	install -Dm755 bin/pacmenu-search  "$(BINDIR)/pacmenu-search"
+	install -Dm644 lib/pacmenu-core.sh "$(LIBDIR)/pacmenu-core.sh"
+	install -Dm644 completions/pacmenu.bash "$(BASHCOMPDIR)/pacmenu"
+	install -Dm644 completions/_pacmenu     "$(ZSHCOMPDIR)/_pacmenu"
+	install -Dm644 completions/pacmenu.fish "$(FISHCOMPDIR)/pacmenu.fish"
+	install -Dm644 desktop/pacmenu.desktop  "$(DESKTOPDIR)/pacmenu.desktop"
+	install -Dm644 LICENSE                  "$(LICENSEDIR)/LICENSE"
 	@echo ""
-	@echo "Installed archer to $(PREFIX)"
+	@echo "Installed pacmenu to $(PREFIX)"
 	@echo "Make sure $(PREFIX)/bin is in your PATH."
 
-uninstall: ## Remove all installed archer files
-	rm -f  "$(BINDIR)/archer"
-	rm -f  "$(BINDIR)/archer-install"
-	rm -f  "$(BINDIR)/archer-remove"
-	rm -f  "$(BINDIR)/archer-search"
+uninstall: ## Remove all installed pacmenu files
+	rm -f  "$(BINDIR)/pacmenu"
+	rm -f  "$(BINDIR)/pacmenu-install"
+	rm -f  "$(BINDIR)/pacmenu-remove"
+	rm -f  "$(BINDIR)/pacmenu-search"
 	rm -rf "$(LIBDIR)"
-	rm -f  "$(BASHCOMPDIR)/archer"
-	rm -f  "$(ZSHCOMPDIR)/_archer"
-	rm -f  "$(FISHCOMPDIR)/archer.fish"
-	rm -f  "$(DESKTOPDIR)/archer.desktop"
+	rm -f  "$(BASHCOMPDIR)/pacmenu"
+	rm -f  "$(ZSHCOMPDIR)/_pacmenu"
+	rm -f  "$(FISHCOMPDIR)/pacmenu.fish"
+	rm -f  "$(DESKTOPDIR)/pacmenu.desktop"
 	rm -rf "$(LICENSEDIR)"
-	@echo "Uninstalled archer from $(PREFIX)"
+	@echo "Uninstalled pacmenu from $(PREFIX)"
 
 check: ## Run shellcheck and syntax validation
 	@echo "Running shellcheck..."
-	@shellcheck $(SCRIPTS) lib/archer-core.sh install.sh
+	@shellcheck $(SCRIPTS) lib/pacmenu-core.sh install.sh
 	@echo ""
 	@echo "Running bash -n syntax check..."
-	@for f in $(SCRIPTS) lib/archer-core.sh install.sh; do \
+	@for f in $(SCRIPTS) lib/pacmenu-core.sh install.sh; do \
 		echo "  $$f"; \
 		bash -n "$$f"; \
 	done
@@ -58,14 +58,14 @@ check: ## Run shellcheck and syntax validation
 	@echo "All checks passed."
 
 dev: ## Create symlinks for live development
-	@mkdir -p "$(PREFIX)/bin" "$(PREFIX)/lib/archer"
-	ln -sf "$(CURDIR)/bin/archer"         "$(PREFIX)/bin/archer"
-	ln -sf "$(CURDIR)/bin/archer-install" "$(PREFIX)/bin/archer-install"
-	ln -sf "$(CURDIR)/bin/archer-remove"  "$(PREFIX)/bin/archer-remove"
-	ln -sf "$(CURDIR)/bin/archer-search"  "$(PREFIX)/bin/archer-search"
-	ln -sf "$(CURDIR)/lib/archer-core.sh" "$(PREFIX)/lib/archer/archer-core.sh"
+	@mkdir -p "$(PREFIX)/bin" "$(PREFIX)/lib/pacmenu"
+	ln -sf "$(CURDIR)/bin/pacmenu"         "$(PREFIX)/bin/pacmenu"
+	ln -sf "$(CURDIR)/bin/pacmenu-install" "$(PREFIX)/bin/pacmenu-install"
+	ln -sf "$(CURDIR)/bin/pacmenu-remove"  "$(PREFIX)/bin/pacmenu-remove"
+	ln -sf "$(CURDIR)/bin/pacmenu-search"  "$(PREFIX)/bin/pacmenu-search"
+	ln -sf "$(CURDIR)/lib/pacmenu-core.sh" "$(PREFIX)/lib/pacmenu/pacmenu-core.sh"
 	@echo "Dev symlinks created. Changes in repo are live."
 
-clean: ## Remove archer cache
-	rm -rf "$${XDG_CACHE_HOME:-$$HOME/.cache}/archer"
+clean: ## Remove pacmenu cache
+	rm -rf "$${XDG_CACHE_HOME:-$$HOME/.cache}/pacmenu"
 	@echo "Cache cleaned."

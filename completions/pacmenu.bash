@@ -1,6 +1,6 @@
-# Bash completion for archer
+# Bash completion for pacmenu
 
-_archer() {
+_pacmenu() {
     local cur commands
     cur="${COMP_WORDS[COMP_CWORD]}"
     commands="install remove search help version"
@@ -10,4 +10,4 @@ _archer() {
     fi
 }
 
-complete -F _archer archer
+complete -F _pacmenu pacmenu

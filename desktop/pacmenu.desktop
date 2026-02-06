@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Archer
+Name=pacmenu
 GenericName=Package Manager
 Comment=Interactive TUI for Arch Linux package management
-Exec=archer
+Exec=pacmenu
 Icon=system-software-install
 Terminal=true
 Categories=System;PackageManager;
